@@ -1,4 +1,35 @@
 <?php
+// ... código anterior de sesión y conexión ...
+
+// 1. Verificamos si el usuario envió algo por la barra de búsqueda
+$busqueda = isset($_GET['buscar']) ? $_GET['buscar'] : '';
+
+if ($busqueda != '') {
+    // 2. Si hay búsqueda, preparamos la consulta con LIKE para nombre o categoría
+$sql = "SELECT p.id, p.nombre_producto, c.nombre_categoria, p.stock, p.precio
+FROM productos p
+INNER JOIN categorias c ON p.categoria_id = c.id
+WHERE p.nombre_producto LIKE ? OR c.nombre_categoria LIKE ?
+ORDER BY p.id ASC";
+
+$stmt = $conn->prepare($sql);
+
+// Le pegamos los comodines % al texto del usuario
+$param_busqueda = "%" . $busqueda . "%";
+
+// Vinculamos el parámetro dos veces (una para el nombre, otra para la categoría)
+$stmt->bind_param("ss", $param_busqueda, $param_busqueda);
+$stmt->execute();
+$resultado = $stmt->get_result();
+$stmt->close();
+} else {
+// 3. Si la barra de búsqueda está vacía, mostramos el inventario normal completo
+$sql = "SELECT p.id, p.nombre_producto, c.nombre_categoria, p.stock, p.precio
+FROM productos p
+INNER JOIN categorias c ON p.categoria_id = c.id
+ORDER BY p.id ASC";
+$resultado = $conn->query($sql);
+}
 // 1. Iniciar sesión y aplicar el candado de seguridad (Guía 14)
 session_start();
 if (!isset($_SESSION['user_id'])) {
@@ -17,6 +48,23 @@ INNER JOIN categorias c ON p.categoria_id = c.id
 ORDER BY p.id ASC";
 
 // 4. Ejecutar la consulta con MySQLi Orientado a Objetos
+<!-- Agrega esto arriba de la etiqueta <table> -->
+<div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items:
+center;">
+<a href="nuevo_producto.php" style="background: #3b82f6; color: white; padding: 10px;
+text-decoration: none; border-radius: 5px; font-weight: bold;">+ Nuevo Producto</a>
+
+<!-- Formulario de Búsqueda -->
+<form method="GET" style="display: flex; gap: 10px;">
+<input type="text" name="buscar" placeholder="Buscar producto o categoría..."
+value="<?php echo isset($_GET['buscar']) ? $_GET['buscar'] : ''; ?>"
+style="padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; width: 250px;">
+<button type="submit" style="background: #10b981; color: white; border: none; padding:
+8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">🔍 Buscar</button>
+<a href="inventario.php" style="background: #64748b; color: white; padding: 8px 15px;
+text-decoration: none; border-radius: 4px;">Limpiar</a>
+</form>
+</div>
 
 $resultado = $conn->query($sql);
 ?>
@@ -111,6 +159,7 @@ $resultado->free();
 <!-- NUEVO BOTÓN DE EDITAR -->
 <a href="editar_producto.php?id=<?php echo $fila['id']; ?>" class="btn-editar">✏️
 Editar</a>
+
 
 <!-- Botón de eliminar (ya lo tenías) -->
 <a href="eliminar_producto.php?id=<?php echo $fila['id']; ?>" class="btn-eliminar"
