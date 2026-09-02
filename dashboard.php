@@ -107,5 +107,6 @@ $_SESSION['rol']; ?>)</span>
 <a href="#" class="modulo" style="background:#64748b;">🛒Punto de Venta
 (Próximamente)</a>
 </div>
+<a href="nueva_compra.php" class="modulo" style="background:#10b981;">📥
 </body>
 </html>
