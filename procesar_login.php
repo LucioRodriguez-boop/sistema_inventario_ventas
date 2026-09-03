@@ -29,9 +29,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 // 8. Verificar si encontramos un usuario registrado con ese nombre
-
-
-
 if ($result->num_rows === 1) {
 
 // Extraer los datos del usuario en un arreglo asociativo
@@ -63,6 +60,7 @@ exit();
 
 // Cerrar la sentencia de forma ordenada
 $stmt->close();
+
 
 
 } catch (mysqli_sql_exception $e) {

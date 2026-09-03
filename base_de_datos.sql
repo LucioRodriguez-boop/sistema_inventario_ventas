@@ -1,4 +1,7 @@
-gitUSE sistema_inventario;
+CREATE DATABASE sistema_inventario;
+
+-- Usar la base de datos del proyecto
+USE sistema_inventario;
 
 -- 1. Tabla para el módulo de Login y Seguridad
 CREATE TABLE usuarios (
@@ -37,17 +40,31 @@ INSERT INTO productos (nombre_producto, categoria_id, stock, precio) VALUES
 ('Laptop Dell Inspiron 15', 1, 15, 720.00),
 ('Mouse Inalámbrico Logitech', 2, 25, 12.00);
 
---Guaia 11 REPORTE RELACIONADOS AVANZADOS
---Egercicio 1: reporte general de inventario
-SELECT p.id,  p.nombre_producto, c.nombre_categoria, p.stock, p.precio
-FROM productos p
-INNER JOIN categorias c ON p.categoria_id=c.id;
 
---2 Reporte filtrado pr departamento
-SELECT p.id,  p.nombre_producto, c.nombre_categoria, p.stock, p.precio
-FROM productos p
-INNER JOIN categorias c ON p.categoria_id=c.id
-WHERE c.nombre_categoria = "Accesorios";
+-- REPORTES RELACIONALES AVANZADOS (Guía 11)
+
+-- 1. Vista completa del inventario con categorías legibles para administración:
+SELECT 
+    p.id,
+    p.nombre_producto, 
+    c.nombre_categoria, 
+    p.stock, 
+    p.precio 
+    FROM productos p
+INNER JOIN categorias c ON p.categoria_id = c.id;
+
+
+-- 2. Vista filtrada exclusivamente para el departamento de 'Accesorios':
+SELECT 
+    p.id, 
+    p.nombre_producto, 
+    c.nombre_categoria, 
+    p.stock, 
+    p.precio 
+    FROM productos p
+INNER JOIN categorias c ON p.categoria_id = c.id WHERE c.nombre_categoria = 'Accesorios';
+
+
 
 -- ====================================================================
 -- CONSULTAS DE ESTADÍSTICAS Y MÉTRICAS PARA EL DASHBOARD (Guía 12)
@@ -63,15 +80,30 @@ SELECT SUM(precio * stock) AS valor_monetario_inventario FROM productos;
 -- Tarjeta 3: Precio del producto estrella o de mayor gama del inventario
 SELECT MAX(precio) AS producto_mas_caro FROM productos;
 
+Instituto Nacional de Ciudad Barrios
+Bachillerato en Desarrollo de Software - Allan Romero
+
 -- Tarjeta 4: Reporte de unidades físicas totales en existencia agrupadas por categoría
 SELECT c.nombre_categoria, SUM(p.stock) AS existencias_totales
 FROM productos p
 INNER JOIN categorias c ON p.categoria_id = c.id
 GROUP BY c.nombre_categoria;
 
+
+---CREATE TABLE
+CREATE TABLE proveedores (
+id INT AUTO_INCREMENT PRIMARY KEY,
+nombre_empresa VARCHAR(100) NOT NULL,
+contacto VARCHAR(100),
+telefono VARCHAR(20),
+direccion TEXT
+);
+
+---INSERT
 INSERT INTO proveedores (nombre_empresa, contacto, telefono, direccion) VALUES
 ('Tech Data El Salvador', 'Juan Pérez', '2255-8899', 'San Salvador, Col. Escalón'),
 ('Distribuidora de Papel', 'María Gómez', '2666-4433', 'San Miguel, Centro');
+
 
 -- ====================================================================
 -- MÓDULO DE COMPRAS: ARQUITECTURA MAESTRO-DETALLE (Guía 23)
@@ -92,6 +124,10 @@ FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 CREATE TABLE detalle_compras (
 id INT AUTO_INCREMENT PRIMARY KEY,
 compra_id INT NOT NULL,
+
+Instituto Nacional de Ciudad Barrios
+Bachillerato en Desarrollo de Software - Allan Romero
+
 producto_id INT NOT NULL,
 cantidad INT NOT NULL,
 precio_compra DECIMAL(10, 2) NOT NULL,

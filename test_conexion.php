@@ -1,4 +1,5 @@
 <?php
+
 // Incluir el puente de conexión que programamos en el Paso 2
 require_once 'conexion.php';
 
@@ -7,9 +8,6 @@ try {
 $query = "SELECT p.nombre_producto, p.precio, p.stock FROM productos p";
 
 // Ejecutar la consulta en la base de datos a través del objeto $conn
-
-
-
 $result = $conn->query($query);
 
 echo "<h1>Enlace Exitoso: Conexión y Consulta Verificadas</h1>";

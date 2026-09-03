@@ -1,4 +1,5 @@
 <?php
+
 // Configuración de las credenciales de la base de datos
 $host = "localhost";
 $db_name = "sistema_inventario";
