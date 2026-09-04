@@ -180,6 +180,8 @@ $precio_maximo = $fila_caro['max_precio'] ? $fila_caro['max_precio'] : 0;
         
         <!-- Este enlace lo programaremos en el siguiente bloque del año -->
         <a href="#" class="modulo" style="background:#64748b;">🛒 Punto de Venta (Próximamente)</a>
+    
+        <a href="historial_compras.php" class="modulo">Historial de Compras</a>
     </div>
 
 </body>
